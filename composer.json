@@ -1,0 +1,5 @@
+{
+    "name": "rsicart/smartadserver",
+    "version": "0.1",
+    "description": "Classes to interact with Smart AdServer REST API."
+}

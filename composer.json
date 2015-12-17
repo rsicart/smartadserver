@@ -1,5 +1,14 @@
 {
     "name": "rsicart/smartadserver",
     "version": "0.1",
-    "description": "Classes to interact with Smart AdServer REST API."
+    "description": "Classes to interact with Smart AdServer REST API.",
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "Core/",
+            "Serializer\\": "Serializer/"
+        }
+    }
 }

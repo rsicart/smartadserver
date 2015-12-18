@@ -34,8 +34,7 @@ class UserGroupTest extends PHPUnit_Framework_TestCase
         $ug->setId($id);
         $ug->setName($name);
 
-        $json = $ug->toJson();
-        $data = json_decode($json, false);
+        $data = json_decode($ug, false);
 
         $ugCopy = new UserGroup();
         $ugCopy->setId($data->id);

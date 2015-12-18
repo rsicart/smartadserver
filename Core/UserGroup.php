@@ -2,20 +2,18 @@
 
 namespace Core;
 
-use Serializer\JsonSerializer;
 
-
-class UserGroup implements JsonSerializer
+class UserGroup extends Entity
 {
     /**
      * @var $id int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var $name string
      */
-    private $name;
+    protected $name;
 
 
     public function getId()
@@ -36,16 +34,5 @@ class UserGroup implements JsonSerializer
     public function setName($name)
     {
         return $this->name = $name;
-    }
-
-
-    public function jsonSerialize()
-    {
-        return \get_object_vars($this);
-    }
-
-    public function toJson()
-    {
-        return json_encode($this->jsonSerialize(), JSON_PRETTY_PRINT);
     }
 }

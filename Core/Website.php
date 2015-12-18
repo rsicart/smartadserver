@@ -2,47 +2,43 @@
 
 namespace Core;
 
-use Core\Language;
-use Core\UserGroup;
-use Serializer\JsonSerializer;
 
-
-class Website implements JsonSerializer
+class Website extends Entity
 {
     /**
      * @var $id int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var $name string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var $userGroup UserGroup
      */
-    private $userGroup;
+    protected $userGroup;
 
     /**
      * @var $url string
      */
-    private $url;
+    protected $url;
 
     /**
      * @var $language Language
      */
-    private $language;
+    protected $language;
 
     /**
      * @var $isArchived boolean
      */
-    private $isArchived;
+    protected $isArchived;
 
     /**
      * @var $updatedAt DateTime
      */
-    private $updatedAt;
+    protected $updatedAt;
 
 
     public function getId()
@@ -128,10 +124,5 @@ class Website implements JsonSerializer
             'isArchived' => $this->getIsArchived(),
             'updatedAt' => $this->getUpdatedAt()->format(\DateTime::ATOM),
         ];
-    }
-
-    public function toJson()
-    {
-        return json_encode($this->jsonSerialize(), JSON_PRETTY_PRINT);
     }
 }

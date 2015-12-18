@@ -34,8 +34,7 @@ class LanguageTest extends PHPUnit_Framework_TestCase
         $l->setId($id);
         $l->setName($name);
 
-        $json = $l->toJson();
-        $data = json_decode($json, false);
+        $data = json_decode($l, false);
 
         $lCopy = new Language();
         $lCopy->setId($data->id);

@@ -102,8 +102,7 @@ class WebsiteTest extends PHPUnit_Framework_TestCase
         $w->setUpdatedAt($dt);
 
 
-        $json = $w->toJson();
-        $data = json_decode($json);
+        $data = json_decode($w);
 
         $lCopy = new Language();
         $lCopy->setId($data->languageId);

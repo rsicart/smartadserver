@@ -125,4 +125,26 @@ class Site extends Entity
             'updatedAt' => $this->getUpdatedAt()->format(\DateTime::ATOM),
         ];
     }
+
+    public function createFromArray($data)
+    {
+        $data = (object) $data;
+
+        $userGroup = new UserGroup();
+        $userGroup->setId($data->userGroupId);
+
+        $language = new Language();
+        $language->setId($data->languageId);
+
+        $instance = new Site();
+        $instance->setId($data->id);
+        $instance->setName($data->name);
+        $instance->setUserGroup($userGroup);
+        $instance->setUrl($data->url);
+        $instance->setLanguage($language);
+        $instance->setIsArchived($data->isArchived);
+        $instance->setUpdatedAt(new \DateTime($data->updatedAt));
+
+        return $instance;
+    }
 }

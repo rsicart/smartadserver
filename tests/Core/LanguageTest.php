@@ -42,4 +42,21 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($l, $lCopy, 'Languages are different');
     }
+
+    public function testCreateFromArray()
+    {
+        $data = [
+            'id' => 1,
+            'name' => 'Libcaca',
+        ];
+
+        $lFromArray = Language::createFromArray($data);
+        $lFromObject = Language::createFromArray((object) $data);
+
+        $this->assertInstanceOf('Core\Language', $lFromArray);
+        $this->assertInstanceOf('Core\Language', $lFromObject);
+        $this->assertEquals($lFromArray, $lFromObject, 'Languages are different');
+        $this->assertEquals(1, $lFromArray->getId());
+        $this->assertEquals(1, $lFromObject->getId());
+    }
 }

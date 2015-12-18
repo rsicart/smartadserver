@@ -35,4 +35,15 @@ class Language extends Entity
     {
         return $this->name = $name;
     }
+
+    public function createFromArray($data)
+    {
+        $data = (object) $data;
+
+        $instance = new Language();
+        $instance->setId($data->id);
+        $instance->setName($data->name);
+
+        return $instance;
+    }
 }

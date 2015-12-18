@@ -42,4 +42,21 @@ class UserGroupTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($ug, $ugCopy, 'UserGroups are different');
     }
+
+    public function testCreateFromArray()
+    {
+        $data = [
+            'id' => 1,
+            'name' => 'Libcaca',
+        ];
+
+        $ugFromArray = UserGroup::createFromArray($data);
+        $ugFromObject = UserGroup::createFromArray((object) $data);
+
+        $this->assertInstanceOf('Core\UserGroup', $ugFromArray);
+        $this->assertInstanceOf('Core\UserGroup', $ugFromObject);
+        $this->assertEquals($ugFromArray, $ugFromObject, 'UserGroups are different');
+        $this->assertEquals(1, $ugFromArray->getId());
+        $this->assertEquals(1, $ugFromObject->getId());
+    }
 }

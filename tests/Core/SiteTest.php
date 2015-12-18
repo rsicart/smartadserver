@@ -112,7 +112,7 @@ class SiteTest extends PHPUnit_Framework_TestCase
         $ugCopy->setId($data->userGroupId);
         $ugCopy->setName('UserGroup');
 
-        $dtCopy = new DateTime($data->updatedAt);
+        $dtCopy = new \DateTime($data->updatedAt);
 
         $wCopy = new Site();
         $wCopy->setId($data->id);
@@ -123,5 +123,28 @@ class SiteTest extends PHPUnit_Framework_TestCase
         $wCopy->setIsArchived($data->isArchived);
         $wCopy->setUpdatedAt($dtCopy);
 
-        $this->assertEquals($w, $wCopy, "Websites are different");    }
+        $this->assertEquals($w, $wCopy, "Websites are different");
+    }
+
+    public function testCreateFromArray()
+    {
+        $data = [
+            'id' => 1,
+            'name' => 'Libcaca',
+            'userGroupId' => 234,
+            'url' => 'www.example.com',
+            'languageId' => 2,
+            'isArchived' => true,
+            'updatedAt' => '1984-06-01T07:34:00',
+        ];
+
+        $sFromArray = Site::createFromArray($data);
+        $sFromObject = Site::createFromArray((object) $data);
+
+        $this->assertInstanceOf('Core\Site', $sFromArray);
+        $this->assertInstanceOf('Core\Site', $sFromObject);
+        $this->assertEquals($sFromArray, $sFromObject, 'Sites are different');
+        $this->assertEquals(1, $sFromArray->getId());
+        $this->assertEquals(1, $sFromObject->getId());
+    }
 }

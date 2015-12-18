@@ -4,16 +4,16 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use Core\UserGroup;
 use Core\Language;
-use Core\Website;
+use Core\Site;
 
 
-class WebsiteTest extends PHPUnit_Framework_TestCase
+class SiteTest extends PHPUnit_Framework_TestCase
 {
 
     public function testSetAndGetId()
     {
         $id = 1;
-        $w = new Website();
+        $w = new Site();
         $w->setId($id);
 
         $this->assertEquals($id, $w->getId(), "Getter or setter doesn't work as expected");
@@ -22,7 +22,7 @@ class WebsiteTest extends PHPUnit_Framework_TestCase
     public function testSetAndGetName()
     {
         $name = 'Libcaca';
-        $w = new Website();
+        $w = new Site();
         $w->setName($name);
 
         $this->assertEquals($name, $w->getName(), "Getter or setter doesn't work as expected");
@@ -34,7 +34,7 @@ class WebsiteTest extends PHPUnit_Framework_TestCase
         $ug->setId(456);
         $ug->setName('UserGroup');
 
-        $w = new Website();
+        $w = new Site();
         $w->setUserGroup($ug);
 
         $this->assertEquals($ug, $w->getUserGroup(), "Getter or setter doesn't work as expected");
@@ -43,7 +43,7 @@ class WebsiteTest extends PHPUnit_Framework_TestCase
     public function testSetAndGetUrl()
     {
         $url = 'www.example.com';
-        $w = new Website();
+        $w = new Site();
         $w->setUrl($url);
 
         $this->assertEquals($url, $w->getUrl(), "Getter or setter doesn't work as expected");
@@ -55,7 +55,7 @@ class WebsiteTest extends PHPUnit_Framework_TestCase
         $l->setId(123);
         $l->setName('Language');
 
-        $w = new Website();
+        $w = new Site();
         $w->setLanguage($l);
 
         $this->assertEquals($l, $w->getLanguage(), "Getter or setter doesn't work as expected");
@@ -64,7 +64,7 @@ class WebsiteTest extends PHPUnit_Framework_TestCase
     public function testSetAndGetIsArchived()
     {
         $ia = true;
-        $w = new Website();
+        $w = new Site();
         $w->setIsArchived($ia);
 
         $this->assertEquals($ia, $w->getIsArchived(), "Getter or setter doesn't work as expected");
@@ -74,7 +74,7 @@ class WebsiteTest extends PHPUnit_Framework_TestCase
     {
         $dt = new \DateTime();
 
-        $w = new Website();
+        $w = new Site();
         $w->setUpdatedAt($dt);
 
         $this->assertEquals($dt, $w->getUpdatedAt(), "Getter or setter doesn't work as expected");
@@ -92,7 +92,7 @@ class WebsiteTest extends PHPUnit_Framework_TestCase
 
         $id = 1;
         $dt = new \DateTime();
-        $w = new Website();
+        $w = new Site();
         $w->setId($id);
         $w->setName('Website');
         $w->setUserGroup($ug);
@@ -114,7 +114,7 @@ class WebsiteTest extends PHPUnit_Framework_TestCase
 
         $dtCopy = new DateTime($data->updatedAt);
 
-        $wCopy = new Website();
+        $wCopy = new Site();
         $wCopy->setId($data->id);
         $wCopy->setName($data->name);
         $wCopy->setUserGroup($ugCopy);

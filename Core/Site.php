@@ -3,7 +3,7 @@
 namespace Core;
 
 
-class Website extends Entity
+class Site extends Entity
 {
     /**
      * @var $id int

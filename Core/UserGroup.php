@@ -36,12 +36,11 @@ class UserGroup extends Entity
         return $this->name = $name;
     }
 
-    public function createFromArray($url, $data)
+    public function createFromArray($data)
     {
         $data = (object) $data;
 
         $instance = new UserGroup();
-        $instance->setApiUrl($url);
         $instance->setId($data->id);
         $instance->setName($data->name);
 

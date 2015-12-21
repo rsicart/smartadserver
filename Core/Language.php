@@ -36,12 +36,11 @@ class Language extends Entity
         return $this->name = $name;
     }
 
-    public function createFromArray($url, $data)
+    public function createFromArray($data)
     {
         $data = (object) $data;
 
         $instance = new Language();
-        $instance->setApiUrl($url);
         $instance->setId($data->id);
         $instance->setName($data->name);
 

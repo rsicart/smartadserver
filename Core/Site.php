@@ -111,7 +111,6 @@ class Site extends Entity
         return $this->updatedAt = $updatedAt;
     }
 
-
     public function jsonSerialize()
     {
         // custom
@@ -126,20 +125,17 @@ class Site extends Entity
         ];
     }
 
-    public function createFromArray($url, $data)
+    public function createFromArray($data)
     {
         $data = (object) $data;
 
         $userGroup = new UserGroup();
-        $instance->setApiUrl($url);
         $userGroup->setId($data->userGroupId);
 
         $language = new Language();
-        $instance->setApiUrl($url);
         $language->setId($data->languageId);
 
         $instance = new Site();
-        $instance->setApiUrl($url);
         $instance->setId($data->id);
         $instance->setName($data->name);
         $instance->setUserGroup($userGroup);

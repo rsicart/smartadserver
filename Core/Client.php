@@ -120,4 +120,44 @@ class Client
         }
         return $name;
     }
+
+    public function fetchAll(Entity $instance, $ids)
+    {
+        if (!$instance->isAllowedMethod(__METHOD__))
+            throw new \DomainException(__METHOD__ . ' not allowed on this entity.');
+
+        throw new \Exception('Not implemented');
+    }
+
+    public function fetch(Entity $instance)
+    {
+        if (!$instance->isAllowedMethod(__METHOD__))
+            throw new \DomainException(__METHOD__ . ' not allowed on this entity.');
+
+        throw new \Exception('Not implemented');
+    }
+
+    public function create(Entity $instance)
+    {
+        if (!$instance->isAllowedMethod(__METHOD__))
+            throw new \DomainException(__METHOD__ . ' not allowed on this entity.');
+
+        throw new \Exception('Not implemented');
+    }
+
+    public function update(Entity $instance)
+    {
+        if (!$instance->isAllowedMethod(__METHOD__))
+            throw new \DomainException(__METHOD__ . ' not allowed on this entity.');
+
+        throw new \Exception('Not implemented');
+    }
+
+    public function delete(Entity $instance)
+    {
+        if (!$instance->isAllowedMethod(__METHOD__))
+            throw new \DomainException(__METHOD__ . ' not allowed on this entity.');
+
+        throw new \Exception('Not implemented');
+    }
 }

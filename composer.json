@@ -7,8 +7,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Core\\": "Core/",
-            "Serializer\\": "Serializer/"
+            "Core\\": "Core/"
         }
     }
 }

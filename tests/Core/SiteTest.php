@@ -147,4 +147,43 @@ class SiteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $sFromArray->getId());
         $this->assertEquals(1, $sFromObject->getId());
     }
+
+    public function testGetAllowedMethods()
+    {
+        $id = 1;
+        $name = 'Libcaca';
+        $s = new Site();
+        $s->setId($id);
+        $s->setName($name);
+
+        $allowed = ['fetchAll', 'fetch', 'create', 'update', 'delete',];
+
+        $this->assertEquals($allowed, $s->getAllowedMethods());
+    }
+
+    /**
+     * @dataProvider isAllowedMethodProvider
+     */
+    public function testIsAllowedMethod($method, $expected)
+    {
+        $id = 1;
+        $name = 'Libcaca';
+        $s = new Site();
+        $s->setId($id);
+        $s->setName($name);
+
+        $this->assertEquals($expected, $s->isAllowedMethod($method));
+    }
+
+    public function isAllowedMethodProvider()
+    {
+        // method name, boolean result
+        return [
+            ['fetchAll', true],
+            ['fetch', true],
+            ['create', true],
+            ['update', true],
+            ['delete', true],
+        ];
+    }
 }

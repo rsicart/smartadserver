@@ -12,10 +12,18 @@ abstract class Entity implements \JsonSerializable
      */
     abstract public function createFromArray($data);
 
-    public function isMethodAllowed($name)
+    /**
+     * Return a list of allowed methods
+     * @return array
+     */
+    public function getAllowedMethods()
     {
-        $classMethods = get_class_methods($this);
-        if ($name && $classMethods && in_array($name, $classMethods))
+        return static::$allowedMethods;
+    }
+
+    public function isAllowedMethod($name)
+    {
+        if ($name && in_array($name, $this->getAllowedMethods()))
             return true;
         return false;
     }

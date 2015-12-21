@@ -59,4 +59,43 @@ class LanguageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $lFromArray->getId());
         $this->assertEquals(1, $lFromObject->getId());
     }
+
+    public function testGetAllowedMethods()
+    {
+        $id = 1;
+        $name = 'Libcaca';
+        $l = new Language();
+        $l->setId($id);
+        $l->setName($name);
+
+        $allowed = ['fetchAll',];
+
+        $this->assertEquals($allowed, $l->getAllowedMethods());
+    }
+
+    /**
+     * @dataProvider isAllowedMethodProvider
+     */
+    public function testIsAllowedMethod($method, $expected)
+    {
+        $id = 1;
+        $name = 'Libcaca';
+        $l = new Language();
+        $l->setId($id);
+        $l->setName($name);
+
+        $this->assertEquals($expected, $l->isAllowedMethod($method));
+    }
+
+    public function isAllowedMethodProvider()
+    {
+        // method name, boolean result
+        return [
+            ['fetchAll', true],
+            ['fetch', false],
+            ['create', false],
+            ['update', false],
+            ['delete', false],
+        ];
+    }
 }

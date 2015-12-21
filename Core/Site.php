@@ -6,6 +6,11 @@ namespace Core;
 class Site extends Entity
 {
     /**
+     * @var $allowedMethods list of allowed methods
+     */
+    protected static $allowedMethods = ['fetchAll', 'fetch', 'create', 'update', 'delete',];
+
+    /**
      * @var $id int
      */
     protected $id;

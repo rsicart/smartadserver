@@ -6,6 +6,11 @@ namespace Core;
 class UserGroup extends Entity
 {
     /**
+     * @var $allowedMethods list of allowed methods
+     */
+    protected static $allowedMethods = ['fetchAll',];
+
+    /**
      * @var $id int
      */
     protected $id;

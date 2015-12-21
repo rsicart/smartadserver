@@ -47,4 +47,12 @@ class UserGroup extends Entity
 
         return $instance;
     }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        ];
+    }
 }

@@ -235,27 +235,82 @@ class Client
         return $response->body;
     }
 
+    /**
+     * Creates a new entity.
+     * Note: to obtain the created entity id, we use the http response header 'Location'
+     * @param Entity $instance
+     * @return Entity
+     */
     public function create(Entity $instance)
     {
-        if (!$instance->isAllowedMethod(__METHOD__))
-            throw new \DomainException(__METHOD__ . ' not allowed on this entity.');
+        if (!$instance->isAllowedMethod(__FUNCTION__))
+            throw new \DomainException(__FUNCTION__ . ' not allowed on this entity.');
 
-        throw new \Exception('Not implemented');
+        $url = sprintf('%s/%s/%s', $this->getApiUrl(), $this->getNetworkId(), $this->getEndpointName($instance));
+
+        $response = \Httpful\Request::post($url)
+            ->authenticateWith($this->getLogin(), $this->getPassword())
+            ->sendsJson()
+            ->body($instance)
+            ->send();
+
+        if ($response->hasErrors()) {
+            $exception = json_decode($response->body);
+            throw new \UnexpectedValueException(sprintf("API response raised a '%s' exception with a message: '%s'. Status code %s", $exception->name, $exception->message, $response->code));
+        }
+
+        // get unique id of created entity and update entity's id
+        if (!isset($response->headers['location']))
+            throw new \UnexpectedValueException(sprintf('API response didn\'t send the created id. Status code %s', $response->code));
+
+        $id = $this->getCreatedEntityId($instance, $response->headers['location']);
+        $instance->setId($id);
+
+        return $instance;
     }
 
+    /**
+     * Updates an existing entity.
+     * @param Entity $instance
+     * @return Entity
+     */
     public function update(Entity $instance)
     {
-        if (!$instance->isAllowedMethod(__METHOD__))
-            throw new \DomainException(__METHOD__ . ' not allowed on this entity.');
+        if (!$instance->isAllowedMethod(__FUNCTION__))
+            throw new \DomainException(__FUNCTION__ . ' not allowed on this entity.');
 
-        throw new \Exception('Not implemented');
+        $url = sprintf('%s/%s/%s', $this->getApiUrl(), $this->getNetworkId(), $this->getEndpointName($instance));
+
+        $response = \Httpful\Request::put($url)
+            ->authenticateWith($this->getLogin(), $this->getPassword())
+            ->sendsJson()
+            ->body($instance)
+            ->send();
+
+        if ($response->hasErrors()) {
+            $exception = json_decode($response->body);
+            throw new \UnexpectedValueException(sprintf("API response raised a '%s' exception with a message: '%s'. Status code %s", $exception->name, $exception->message, $response->code));
+        }
+
+        return $instance;
     }
 
     public function delete(Entity $instance)
     {
-        if (!$instance->isAllowedMethod(__METHOD__))
-            throw new \DomainException(__METHOD__ . ' not allowed on this entity.');
+        if (!$instance->isAllowedMethod(__FUNCTION__))
+            throw new \DomainException(__FUNCTION__ . ' not allowed on this entity.');
 
-        throw new \Exception('Not implemented');
+        $url = sprintf('%s/%s/%s/%s', $this->getApiUrl(), $this->getNetworkId(), $this->getEndpointName($instance), $instance->getId());
+
+        $response = \Httpful\Request::delete($url)
+            ->authenticateWith($this->getLogin(), $this->getPassword())
+            ->send();
+
+        if ($response->hasErrors()) {
+            $exception = json_decode($response->body);
+            throw new \UnexpectedValueException(sprintf("API response raised a '%s' exception with a message: '%s'. Status code %s", $exception->name, $exception->message, $response->code));
+        }
+
+        return $instance;
     }
 }

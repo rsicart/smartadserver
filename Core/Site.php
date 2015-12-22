@@ -63,6 +63,10 @@ class Site extends Entity
 
     public function setName($name)
     {
+        $pattern = '/^[0-9\/a-zA-Z._-]+$/';
+        if (preg_match($pattern, $name) === false)
+            throw new \InvalidArgumentException('Invalid name.');
+
         return $this->name = $name;
     }
 

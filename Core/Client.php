@@ -25,6 +25,7 @@ class Client
      */
     private $password;
 
+
     /**
      * Sets network id.
      * @param string $id
@@ -44,12 +45,22 @@ class Client
     }
 
     /**
+     * Checks if a given url is valid
+     * @param string $url
+     * @return boolean
+     */
+    protected function isValidUrl($url)
+    {
+        return (filter_var($url, FILTER_VALIDATE_URL) && stripos($url, 'http', 0) !== false);
+    }
+
+    /**
      * Sets http api base url.
      * @param string $url api base url
      */
     public function setApiUrl($url)
     {
-        if (!filter_var($url, FILTER_VALIDATE_URL) || stripos($url, 'http', 0) === false)
+        if (!$this->isValidUrl($url))
             throw new \InvalidArgumentException('Invalid url.');
         $this->apiUrl = $url;
     }
@@ -120,21 +131,108 @@ class Client
         }
         return $name;
     }
-
-    public function fetchAll(Entity $instance, $ids)
+    /**
+     * Creates a new instance of Client
+     * @param array $options
+     * @return Client
+     */
+    public function createFromArray($options)
     {
-        if (!$instance->isAllowedMethod(__METHOD__))
-            throw new \DomainException(__METHOD__ . ' not allowed on this entity.');
+        $instance = new Client();
+        $instance->setNetworkId($options['networkId']);
+        $instance->setApiUrl($options['url']);
+        $instance->setLogin($options['login']);
+        $instance->setPassword($options['password']);
 
-        throw new \Exception('Not implemented');
+        return $instance;
     }
 
+    /**
+     * Returns the unique id from a created entity, extracted from an url.
+     * @param Entity $instance
+     * @param string $url
+     * @return integer|null
+     */
+    public function getCreatedEntityId(Entity $instance, $url)
+    {
+        if (!$this->isValidUrl($url))
+            throw new \InvalidArgumentException('Invalid url.');
+
+        $components = parse_url($url);
+        if (!isset($components['path']))
+            throw new \InvalidArgumentException('Invalid url.');
+
+        $pathComponents = explode('/', $components['path']);
+        list($endpointName, $id) = array_slice($pathComponents, -2);
+
+        if ($endpointName == $this->getEndpointName($instance) && is_numeric($id))
+            return $id;
+
+        return null;
+    }
+
+    /**
+     * Get a list of entities.
+     * @param Entity $instance
+     * @param array $ids
+     * @return <array>Entity
+     */
+    public function fetchAll(Entity $instance, array $ids = [])
+    {
+        if (!$instance->isAllowedMethod(__FUNCTION__))
+            throw new \DomainException(__FUNCTION__ . ' not allowed on this entity.');
+
+        $url = sprintf('%s/%s/%s', $this->getApiUrl(), $this->getNetworkId(), $this->getEndpointName($instance));
+
+        // add querystring
+        if ($ids) {
+            $qs = implode(',', $ids);
+            $url = sprintf('%s?ids=%s', $url, $qs);
+        }
+
+        $response = \Httpful\Request::get($url)
+            ->authenticateWith($this->getLogin(), $this->getPassword())
+            ->parseWith(function ($body) use ($instance) {
+                $list = [];
+                foreach ((array) json_decode($body, true) as $element)
+                    $list[] = $instance->createFromArray($element);
+                return $list;
+            })
+            ->send();
+
+        if ($response->hasErrors()) {
+            $exception = json_decode($response->body);
+            throw new \UnexpectedValueException(sprintf("API response raised a '%s' exception with a message: '%s'. Status code %s", $exception->name, $exception->message, $response->code));
+        }
+
+        return $response->body;
+    }
+
+    /**
+     * Get a specific entity.
+     * @param Entity $instance
+     * @return Entity
+     */
     public function fetch(Entity $instance)
     {
-        if (!$instance->isAllowedMethod(__METHOD__))
-            throw new \DomainException(__METHOD__ . ' not allowed on this entity.');
+        if (!$instance->isAllowedMethod(__FUNCTION__))
+            throw new \DomainException(__FUNCTION__ . ' not allowed on this entity.');
 
-        throw new \Exception('Not implemented');
+        $url = sprintf('%s/%s/%s/%s', $this->getApiUrl(), $this->getNetworkId(), $this->getEndpointName($instance), $instance->getId());
+
+        $response = \Httpful\Request::get($url)
+            ->authenticateWith($this->getLogin(), $this->getPassword())
+            ->parseWith(function ($body) use ($instance) {
+                return $instance->createFromArray((array) json_decode($body, true));
+            })
+            ->send();
+
+        if ($response->hasErrors()) {
+            $exception = json_decode($response->body);
+            throw new \UnexpectedValueException(sprintf("API response raised a '%s' exception with a message: '%s'. Status code %s", $exception->name, $exception->message, $response->code));
+        }
+
+        return $response->body;
     }
 
     public function create(Entity $instance)
